@@ -7,3 +7,44 @@
 body {
   font-family: var(--font-inter), sans-serif;
 }
+
+@layer base {
+  /* Remove scrollbar */
+  .remove-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb:hover {
+    /* background: #1e2238; */
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply relative flex-1 overflow-y-auto px-[5%];
+  }
+
+  .sub-container {
+    @apply mx-auto flex size-full flex-col py-10;
+  }
+
+  .sub-header {
+    @apply text-[18px] font-bold md:text-[24px] font-bold;
+  }
+
+  .container {
+    @apply relative flex-1 overflow-y-auto px-[5%];
+  }
+}
