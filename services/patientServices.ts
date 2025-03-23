@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { CreateUserParams, RegisterUserParams, User } from "@/types";
+import { CreateUserParams, Patient, RegisterUserParams, User } from "@/types";
 import {
   addDoc,
   collection,
@@ -15,9 +15,8 @@ export const createUser = async (user: CreateUserParams) => {
     const q = query(collection(db, "patient"), where("email", "==", email));
     const existingUser = await getDocs(q);
     // if (!existingUser.empty) throw new Error("User already exists");
-    console.log(existingUser.docs[0].data());
     if (!existingUser.empty) {
-      return existingUser.docs[0];
+      return existingUser.docs[0].data();
     }
     const userRef = await addDoc(collection(db, "patient"), user);
     return userRef;
@@ -32,7 +31,7 @@ export const getUser = async (userId: string) => {
   try {
     const q = query(collection(db, "patient"), where("__name__", "==", userId));
     const querySnapshot = await getDocs(q);
-    return JSON.stringify(querySnapshot.docs[0].data());
+    return querySnapshot.docs[0].data() as Patient;
   } catch (error) {
     console.log(error);
   }

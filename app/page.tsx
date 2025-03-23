@@ -23,7 +23,7 @@ export default function Home({ searchParams }: SearchParamProps) {
           <PatientForm />
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-gray-400 xl:text-left">
-              © 2025 My Health Slot
+              © 2025 CarePoint
             </p>
             <Link href="/?admin=true" className="text-green-500 mb-4">
               Admin

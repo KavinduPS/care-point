@@ -66,6 +66,21 @@ export const formatDateTime = (dateString: Date | string) => {
   };
 };
 
+export const convertFirebaseTimestamp = (timestamp: {
+  seconds: number;
+  nanoseconds: number;
+}) => {
+  if (!timestamp || typeof timestamp.seconds !== "number") {
+    return "Invalid date";
+  }
+
+  const milliseconds =
+    timestamp.seconds * 1000 + Math.floor(timestamp.nanoseconds / 1000000);
+  const date = new Date(milliseconds);
+
+  return date.toLocaleString();
+};
+
 export function encryptKey(passkey: string) {
   return btoa(passkey);
 }

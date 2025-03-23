@@ -25,7 +25,7 @@ const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
           />
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-gray-400 xl:text-left">
-              © 2025 My Health Slot
+              © 2025 CarePoint
             </p>
           </div>
         </div>

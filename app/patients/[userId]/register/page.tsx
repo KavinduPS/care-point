@@ -18,9 +18,9 @@ const RegisterPage = async ({ params: { userId } }: SearchParamProps) => {
             alt="logo"
             className="mb-6 mt-12 h-20 w-fit"
           />
-          {user && <RegisterForm user={JSON.parse(user)} />}
+          {user && <RegisterForm user={user} />}
           <p className="justify-items-end text-gray-400 xl:text-left py-12">
-            © 2025 My Health Slot
+            © 2025 CarePoint
           </p>
         </div>
       </section>

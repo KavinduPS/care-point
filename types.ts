@@ -65,6 +65,7 @@ export interface Patient {
 }
 
 export interface Appointment {
+  id: string;
   patient: Patient;
   schedule: Date;
   status: Status;
@@ -77,7 +78,7 @@ export interface Appointment {
 
 export interface CreateAppointmentParams {
   userId: string;
-  patient: string;
+  patient: Patient;
   primaryPhysician: string;
   reason: string;
   schedule: Date;
@@ -88,7 +89,7 @@ export interface CreateAppointmentParams {
 export interface UpdateAppointmentParams {
   appointmentId: string;
   userId: string;
-  timeZone: string;
+  // timeZone: string;
   appointment: Appointment;
   type: string;
 }

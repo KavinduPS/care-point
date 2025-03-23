@@ -76,7 +76,7 @@ const Success = async ({
           </Link>
         </Button>
         <p className="justify-items-end text-gray-400 xl:text-left">
-          © 2025 My Health Slot
+          © 2025 CarePoint
         </p>
       </div>
     </div>
