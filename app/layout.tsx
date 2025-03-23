@@ -11,7 +11,7 @@ const fontSans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "My Health Slot",
+  title: "CarePoint",
   description: "A healthcare management system",
 };
 
