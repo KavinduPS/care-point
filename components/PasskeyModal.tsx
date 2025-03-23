@@ -21,7 +21,7 @@ import { decryptKey, encryptKey } from "@/lib/utils";
 const PasskeyModal = () => {
   const router = useRouter();
   const path = usePathname();
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   const [passkey, setPasskey] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -33,7 +33,7 @@ const PasskeyModal = () => {
   useEffect(() => {
     const accessKey = encryptedKey && decryptKey(encryptedKey);
     if (path) {
-      if (accessKey === process.env.NEXT_PULIC_ADMIN_PASSKEY) {
+      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY?.toString()) {
         setOpen(false);
         router.push("/admin");
       } else {

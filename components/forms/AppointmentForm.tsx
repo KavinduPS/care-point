@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CreateAppointmentSchema,
   getAppointmentSchema,
@@ -16,29 +16,57 @@ import { FormFieldType } from "./PatientForm";
 import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import { Doctors } from "@/constants";
-import { Status } from "@/types";
-import { createAppointment } from "@/services/appointmentServices";
+import { Appointment, Patient, Status, UpdateAppointmentParams } from "@/types";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/services/appointmentServices";
+import { getUser } from "@/services/patientServices";
 
 interface AppointmentFormProps {
   userId: string;
   patientId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+  setOpen?: () => void;
 }
 
-const AppointmentForm = ({ userId, patientId, type }: AppointmentFormProps) => {
+const AppointmentForm = ({
+  userId,
+  patientId,
+  type,
+  appointment,
+  setOpen,
+}: AppointmentFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [patient, setPatient] = useState<Patient | null>();
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      if (patientId) {
+        try {
+          const patientData = await getUser(patientId);
+          setPatient(patientData);
+        } catch (error) {
+          console.error("Error fetching patient:", error);
+        }
+      }
+    };
+
+    fetchPatient();
+  }, [patientId]);
 
   const appointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof appointmentFormValidation>>({
     resolver: zodResolver(appointmentFormValidation),
     defaultValues: {
-      primaryPhysician: "",
-      schedule: new Date(),
-      reason: "",
-      note: "",
-      cancellationReason: "",
+      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
+      schedule: appointment ? new Date(appointment.schedule) : new Date(),
+      reason: appointment ? appointment.reason : "",
+      note: appointment ? appointment.note : "",
+      cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
@@ -64,7 +92,7 @@ const AppointmentForm = ({ userId, patientId, type }: AppointmentFormProps) => {
       if (type === "create" && patientId) {
         const appointmentData = {
           userId,
-          patient: patientId,
+          patient: patient!,
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
@@ -78,6 +106,21 @@ const AppointmentForm = ({ userId, patientId, type }: AppointmentFormProps) => {
             `/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`
           );
         }
+      } else {
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.id!,
+          appointment: {
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values?.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,
+          },
+          type,
+        };
+        const updatedAppointment = await updateAppointment(
+          appointmentToUpdate as UpdateAppointmentParams
+        );
       }
     } catch (error) {
       console.log(error);
@@ -104,12 +147,15 @@ const AppointmentForm = ({ userId, patientId, type }: AppointmentFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-        <section className="mb-12 space-y-4">
-          <h1 className="text-[32px] md:text-[36px] font-bold">
-            New Appointment 🤚
-          </h1>
-          <p className="text-gray-300">Request a new appointment</p>
-        </section>
+        {type === "create" && (
+          <section className="mb-12 space-y-4">
+            <h1 className="text-[32px] md:text-[36px] font-bold">
+              New Appointment 🤚
+            </h1>
+            <p className="text-gray-300">Request a new appointment</p>
+          </section>
+        )}
+
         {type !== "cancel" && (
           <>
             <CustomFormField
