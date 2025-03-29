@@ -9,7 +9,6 @@ export default function Home({ searchParams }: SearchParamProps) {
 
   return (
     <div className="flex h-screen max-h-screen">
-      {/* TODO: OTP */}
       {isAdmin && <PasskeyModal />}
       <section className="remove-scrollbar relative flex-1 overflow-y-auto px-[5%] my-auto">
         <div className="mx-auto max-w-[496px]">

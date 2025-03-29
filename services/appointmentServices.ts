@@ -98,7 +98,6 @@ export const updateAppointment = async ({
       status: appointment.status,
     });
     const updatedAppointment = await getAppointment(appointmentId);
-    //TODO SMS
     revalidatePath("/admin");
     return updatedAppointment;
   } catch (error) {
